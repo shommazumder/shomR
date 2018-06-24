@@ -3,6 +3,7 @@
 export(get_rse)
 export(got_Internet)
 export(plot_rdd_binned)
+export(rdd_robust_bw)
 export(stata_codebook)
 export(theme_map)
 export(theme_shom)

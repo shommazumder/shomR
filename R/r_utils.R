@@ -486,9 +486,8 @@ format_and_save_tab <- function(table,path){
 
 #### MY REGRESSION DISCONTINUITY FUNCTIONS ####
 
-#' Shom's Custom ggplot2 themes
+#' Regression discontinuity raw binned scatter
 #'
-#' Custom ggplot theme for choropleths
 #'
 #' @param data A dataframe
 #' @param forcing The forcing/running variable as a string
@@ -578,4 +577,109 @@ plot_rdd_binned <- function(data,forcing,outcome,cutoff = 0,weights = NULL,
     binned_df = binned_df
   ))
 
+}
+
+#' Robustness to bandwidth choice
+#'
+#'
+#' @param data A dataframe
+#' @param forcing The forcing/running variable as a string
+#' @param outcome The outcome varaible as a string
+#' @param cutoff The cutoff. Defaults to 0.
+#' @param weights Any weights you want to use as a string. Defaults to NULL.
+#' @param ylab The label for the y axis.
+#' @param xlab The label for the x axis.
+#' @param bw The bandwidth. Defaults to the entire support of the forcing variable.
+#' @param se Logical for whether to include the standard errors in the plot.
+#'
+#' @return a list of the plot (in ggplot) and the corresponding effect estimates and standard errors
+#'
+#' @export
+rdd_robust_bw <- function(data, forcing, outcome, cutoff = 0, weights = NULL,
+                          ylab = "Outcome", xlab = "Running Variable", bw = NULL,
+                          se = T){
+  require(lazyeval)
+  require(ggplot2)
+  require(dplyr)
+  require(rdrobust)
+
+  if (is.null(data)) {
+    stop("Please provide a dataframe.")
+  }
+  if (is.null(forcing)) {
+    stop("Please provide a forcing variable.")
+  }
+  if (is.null(outcome)) {
+    stop("Please provide an outcome variable.")
+  }
+  if (!is_character(forcing)) {
+    stop("Forcing variable must be provided as a string.")
+  }
+  if (!is_character(outcome)) {
+    stop("Outcome variable must be provided as a string.")
+  }
+  if (!is.null(weights) & !is_character(weights)) {
+    stop("Weights variable must be provided as a string.")
+  }
+  #should maybe think about imputing the missing values of the outcome?
+  #for now i'll listwise delete
+
+  #set bandwidths
+  bw.data <- as.data.frame(cbind(data[,outcome],data[,forcing]))
+  bw.data <- na.omit(bw.data)
+  ik_bandwidth <- rdbwselect(y = bw.data[,outcome],
+                             x = bw.data[,forcing]
+  )$bws[1]
+
+  #set bw between half and twice the optimal bw
+  bandwidths <- floor(ik_bandwidth/2):floor(ik_bandwidth*2)
+
+  #check to see if rdd works for minimum bandwidth
+  tryit <- try(rdrobust(y = bw.data[,outcome],
+                        x = bw.data[,forcing],
+                        h = bandwidths[1]))
+
+  if(inherits(tryit, "try-error")){
+    # do something when error
+    bandwidths <- bandwidths[2:length(bandwidths)]
+  }
+
+  effects <- rep(NA,length(bandwidths)*length(ylab))
+  lower.se <- rep(NA,length(bandwidths)*length(ylab))
+  upper.se <- rep(NA,length(bandwidths)*length(ylab))
+
+  #estimate models over support of bandwidths
+  for(bw in bandwidths){
+    idx <- which(bandwidths == bw)
+    rd_fit <- rdrobust(y = bw.data[,outcome],
+                       x = bw.data[,forcing],
+                       h = bw)
+    coefs <- c(rd_fit$coef[2])
+    se <- c(rd_fit$se[2])
+    lower <- coefs - 1.96*se
+    upper <- coefs + 1.96*se
+    if(idx == 1){
+      effects[idx:(idx*length(ylab))] <- coefs
+      lower.se[idx:(idx*length(ylab))] <- lower
+      upper.se[idx:(idx*length(ylab))] <- upper
+    }
+    effects[(((idx- 1)*length(ylab)) + 1):(idx*length(ylab))] <- coefs
+    lower.se[(((idx- 1)*length(ylab)) + 1):(idx*length(ylab))] <- lower
+    upper.se[(((idx- 1)*length(ylab)) + 1):(idx*length(ylab))] <- upper
+  }
+  outcome.names <- rep(ylab,times = length(bandwidths))
+  bandwidth.levels <- rep(bandwidths,each = length(ylab))
+  bw.robust.df <- tibble(outcome.names,bandwidth.levels,
+                         effects,lower.se,upper.se)
+  opt.bws <- data.frame(v=c(ik_bandwidth))
+
+  p <- ggplot(data = bw.robust.df,aes(x = bandwidth.levels,y = effects)) +
+    geom_ribbon(aes(ymin = lower.se, ymax = upper.se), fill = "grey80") +
+    geom_line() +
+    theme_bw() +
+    xlab("Bandwidth") +
+    ylab("Effect") +
+    geom_hline(yintercept = cutoff)
+
+  return(list(bw_robust_plot = p,bw_robust_df = bw.robust.df))
 }

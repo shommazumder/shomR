@@ -1,7 +1,7 @@
 Package: shomR
 Type: Package
 Title: Shom's R Bonanza
-Version: 0.1.0
+Version: 0.1.1
 Author: Shom Mazumder
 Maintainer: Shom Mazumder <smazumder@g.harvard.edu>
 Description: This package loads functions that I tend to use a lot.
