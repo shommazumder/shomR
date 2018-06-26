@@ -16,15 +16,15 @@ require(multiwayvcov)
 #'
 #' Custom ggplot theme for general plots
 #'
-#' @param None
+#' @param family font family. defaults to Minion Pro
 #'
 #' @return None
 #'
 #' @export
-theme_shom <- function(){
+theme_shom <- function(family = c("Minion Pro", 'Palatino')){
   theme_minimal() +
   theme(
-    text = element_text(family = "Minion Pro", color = "#22211d",size = 12),
+    text = element_text(family = match.arg(family), color = "#22211d",size = 12),
     #axis.text.x = element_text(angle = 45, hjust = 1),
     # panel.grid.minor = element_line(color = "#ebebe5", size = 0.2),
     panel.grid.major = element_line(color = "#ebebe5", size = 0.5),

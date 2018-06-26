@@ -4,10 +4,10 @@
 \alias{theme_shom}
 \title{Shom's Custom ggplot2 themes}
 \usage{
-theme_shom()
+theme_shom(family = c("Minion Pro", "Palatino"))
 }
 \arguments{
-\item{None}{}
+\item{family}{font family. defaults to Minion Pro}
 }
 \value{
 None
