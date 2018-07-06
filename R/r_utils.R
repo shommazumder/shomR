@@ -102,7 +102,7 @@ got_Internet <- function(){
 
 ####REGRESSION####
 
-#' Checks to see if you have an internet connection
+#' Returns a list of robust standard errors
 #'
 #' @param models.list A list of regression models (lm)
 #' @param hc Type of robust standard error. Defaults to HC2.
@@ -125,6 +125,21 @@ get_cluster_se <- function(list.models,cluster){
   vcovCL.list <- lapply(list.models,FUN = function(x){return(cluster.vcov(x,cluster = eval(clust)))})
   seCL.list <- lapply(vcovCL.list,FUN = function(x){return(sqrt(diag(x)))})
   return(seCL.list)
+}
+
+#' Returns cluster robust first-stage f-stat from felm object
+#'
+#' @param x An felm model
+#'
+#' @return fstat
+#'
+#' @examples
+#' get_fstat_felm()
+#'
+#' @export
+get_fstat_felm <- function(x){
+  fstat <- round(x$stage1$rob.iv1fstat[[1]]['F'],digits = 3)
+  return(fstat)
 }
 
 ch.row <- function(name, yesno) {

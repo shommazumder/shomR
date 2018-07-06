@@ -2,7 +2,7 @@
 % Please edit documentation in R/r_utils.R
 \name{get_rse}
 \alias{get_rse}
-\title{Checks to see if you have an internet connection}
+\title{Returns a list of robust standard errors}
 \usage{
 get_rse(models.list, hc = "HC2")
 }
@@ -15,7 +15,7 @@ get_rse(models.list, hc = "HC2")
 se.list
 }
 \description{
-Checks to see if you have an internet connection
+Returns a list of robust standard errors
 }
 \examples{
 get_rse()
