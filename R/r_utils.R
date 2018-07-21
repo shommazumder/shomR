@@ -501,6 +501,17 @@ interaction_plot_binary <- function(model, effect, moderator, interaction, varco
 }
 
 #### TABLES ####
+
+#' Returns cluster robust first-stage f-stat from felm object
+#'
+#' @param table a latex table from stargazer
+#' @param path a filepath to save the table
+#'
+#'
+#' @examples
+#' format_and_save_tab()
+#'
+#' @export
 format_and_save_tab <- function(table,path){
   #formats and saves stargazer tables
   table <- gsub("\\{\\*\\}", "\\{\\\\dagger\\}", table)
