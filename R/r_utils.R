@@ -142,6 +142,16 @@ get_fstat_felm <- function(x){
   return(fstat)
 }
 
+#' Returns vector of checkmarks
+#'
+#' @param name name of row
+#' @param yesno logical for checkmark
+#'
+#'
+#' @examples
+#' ch.row()
+#'
+#' @export
 ch.row <- function(name, yesno) {
   ##Purpose: adds checkmarks to table
   c(name, ifelse(yesno, "$\\checkmark$", ""))
