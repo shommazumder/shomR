@@ -1,6 +1,9 @@
+#' Iterates over objects
+#'
+#' @export
 iterateObs <- function(sub_index, type, cutoff, ...) {
     if(type == "spatial" & balanced_pnl) {
-        
+
         sub_dt <- dt[time == sub_index]
         n1 <- nrow(sub_dt)
         if(n1 > 1000 & verbose){message(paste("Starting on sub index:", sub_index))}
@@ -11,7 +14,7 @@ iterateObs <- function(sub_index, type, cutoff, ...) {
         XeeXhs <- Bal_XeeXhC(d, X, e, n1, k)
 
     } else if(type == "spatial" & !balanced_pnl) {
-        
+
         sub_dt <- dt[time == sub_index]
         n1 <- nrow(sub_dt)
         if(n1 > 1000 & verbose){message(paste("Starting on sub index:", sub_index))}
@@ -29,7 +32,7 @@ iterateObs <- function(sub_index, type, cutoff, ...) {
             XeeXhs <- XeeXhC_Lg(cbind(lat, lon), cutoff, X, e, n1, k,
                 kernel, dist_fn)
         }
-    
+
     } else if(type == "serial") {
         sub_dt <- dt[unit == sub_index]
         n1 <- nrow(sub_dt)
