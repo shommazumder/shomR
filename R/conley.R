@@ -36,7 +36,7 @@ ConleySEs <- function(reg,
     lat_scale = 111, verbose = FALSE, cores = 1, balanced_pnl = FALSE) {
 
     Fac2Num <- function(x) {as.numeric(as.character(x))}
-    source("R/iterate-obs-function.R", local = TRUE)
+    source("iterate-obs-function.R", local = TRUE)
     if(cores > 1) {invisible(library(parallel))}
 
     if(class(reg) == "felm") {
