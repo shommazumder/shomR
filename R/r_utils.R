@@ -661,7 +661,7 @@ rdd_robust_bw <- function(data, forcing, outcome, cutoff = 0, weights = NULL,
   #for now i'll listwise delete
 
   #set bandwidths
-  bw.data <- as.data.frame(cbind(data[,outcome],data[,forcing]))
+  bw.data <- as.data.frame(data[,c(outcome,forcing)])
   bw.data <- na.omit(bw.data)
   ik_bandwidth <- rdbwselect(y = bw.data[,outcome],
                              x = bw.data[,forcing]

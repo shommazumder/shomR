@@ -6,7 +6,8 @@
 \usage{
 ConleySEs(reg, unit, time, lat, lon, kernel = "bartlett",
   dist_fn = "Haversine", dist_cutoff = 500, lag_cutoff = 5,
-  lat_scale = 111, verbose = FALSE, cores = 1, balanced_pnl = FALSE)
+  lat_scale = 111, verbose = FALSE, cores = 1,
+  balanced_pnl = FALSE)
 }
 \arguments{
 \item{reg}{a regression-like object}
