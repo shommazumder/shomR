@@ -625,7 +625,7 @@ plot_rdd_binned <- function(data,forcing,outcome,cutoff = 0,weights = NULL,
 #' @param weights Any weights you want to use as a string. Defaults to NULL.
 #' @param ylab The label for the y axis.
 #' @param xlab The label for the x axis.
-#' @param bw The bandwidth. Defaults to the entire support of the forcing variable.
+#' @param bw The bandwidth. Defaults to half the IK bw to twice the IK bw.
 #' @param se Logical for whether to include the standard errors in the plot.
 #'
 #' @return a list of the plot (in ggplot) and the corresponding effect estimates and standard errors

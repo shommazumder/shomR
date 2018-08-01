@@ -22,7 +22,7 @@ rdd_robust_bw(data, forcing, outcome, cutoff = 0, weights = NULL,
 
 \item{xlab}{The label for the x axis.}
 
-\item{bw}{The bandwidth. Defaults to the entire support of the forcing variable.}
+\item{bw}{The bandwidth. Defaults to half the IK bw to twice the IK bw.}
 
 \item{se}{Logical for whether to include the standard errors in the plot.}
 }
