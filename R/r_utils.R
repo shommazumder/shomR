@@ -65,6 +65,77 @@ theme_map <- function(...) {
     )
 }
 
+#' Shom's Custom ggplot2 themes
+#'
+#' Custom ggplot legend for pretty plots
+#'
+#'
+#' @return None
+#'
+#' @export
+font_legend_stuff <-
+  theme(plot.title = element_text(family = "ArchivoNarrow-Bold",
+                                  face = "bold", size = rel(1.4), hjust = 0,
+                                  margin = margin(b = 5)),
+        plot.subtitle = element_text(family = "ArchivoNarrow-Regular", hjust = 0,
+                                     margin = margin(t = 3, b = 3)),
+        plot.caption = element_text(family = "ArchivoNarrow-Regular", hjust = 0.5),
+        legend.text = element_text(family = "ArchivoNarrow-Regular"),
+        legend.position = "bottom")
+
+
+#' Shom's Custom ggplot2 themes
+#'
+#' Custom ggplot theme for pretty plots
+#'
+#'@param base_size base size font
+#'@param waffle logical for waffle plot
+#'
+#' @return None
+#'
+#' @export
+theme_shom_pretty <- function(base_size = 11, waffle = FALSE) {
+  ret <- theme_minimal(base_size = base_size, base_family = "ArchivoNarrow-Regular") +
+    theme(plot.background = element_rect(fill = "#f5f5f2", color = NA),
+          panel.background = element_rect(fill = "#f5f5f2", color = NA),
+          legend.background = element_rect(fill = "#f5f5f2", color = NA)) %+replace%
+    font_legend_stuff
+
+  if (waffle) {
+    ret +
+      theme(axis.text = element_blank())
+  } else {
+    ret
+  }
+}
+
+#' Shom's Custom ggplot2 themes
+#'
+#' Custom ggplot theme for choropleths (pretty version)
+#'
+#' @param None
+#'
+#' @return None
+#'
+#' @export
+theme_map_pretty <- function(...) {
+  theme_minimal(base_size = base_size, base_family = "ArchivoNarrow-Regular") +
+    theme(plot.background = element_rect(fill = "#f5f5f2", color = NA),
+          panel.background = element_rect(fill = "#f5f5f2", color = NA),
+          legend.background = element_rect(fill = "#f5f5f2", color = NA),
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_line(color = "#ebebe5", size = 0.2),
+          text = element_text(color = "#22211d"),
+          axis.line = element_blank(),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          panel.border = element_blank()) %+replace%
+    font_legend_stuff
+}
+
 ####DATA PREP####
 
 #' Makes a stata codebook
